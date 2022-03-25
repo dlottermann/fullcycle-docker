@@ -18,7 +18,14 @@ app.get("/", (req, res) => {
     if (err) throw err;
     connection.query(select, (error, results, fields) => {
       if (error) throw err;
-      res.send(`<h1>Full Cycle Rocks!</h1><br>${results[0].name}`);
+
+      let list = "";
+
+      for (let i = 0; i < Object.keys(results).length; i++) {
+        list += `${results[i].name}<br>`;
+      }
+
+      res.send(`<h1>Full Cycle Rocks!</h1><br>${list}`);
     });
   });
 });
