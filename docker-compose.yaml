@@ -7,7 +7,7 @@ services:
       context: ./node
       dockerfile: Dockerfile
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 50s docker-entrypoint.sh
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 60s docker-entrypoint.sh
     command: node index.js
     ports:
       - "3000:3000"
