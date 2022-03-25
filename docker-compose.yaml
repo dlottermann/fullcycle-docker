@@ -12,7 +12,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./node:/usr/src/app
+      - /usr/src/app
     tty: true
     networks:
       - node-network
@@ -26,8 +26,8 @@ services:
     restart: always
     tty: true
     volumes:
-      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - ./mysql:/var/lib/mysql
+      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
@@ -39,11 +39,15 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx
+    entrypoint: dockerize -wait http://app:3000 -timeout 120s /docker-entrypoint.sh nginx -g 'daemon off;'
     tty: true
+    restart: always
     ports:
       - 8080:80
     networks:
       - node-network
+    depends_on:
+      - app
 
 networks:
   node-network:
